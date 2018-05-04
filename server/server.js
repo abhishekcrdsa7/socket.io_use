@@ -11,13 +11,13 @@ app.use(express.static(publicPath));
 
 io.on('connection',(socket) => {console.log('New Connection');
 
-socket.emit('newMessage',{
-  from: "abhishek",
-  text: "Hi my name is abhishek",
-  time: new Date()
-});
+socket.emit('newMessage',{from: "Admin",text: "Welcome to the chat room."});
+socket.broadcast.emit('newMessage',{from: "Admin",text: "new user connected to the chat room."});
 
-socket.on('createMessage',(message) => {console.log({...message,createdAt: new Date()})})
+socket.on('createMessage',(message) => {
+  console.log(message);
+  io.emit('newMessage',{...message,createdAt: new Date()});
+})
 socket.on('disconnect',() => {console.log("client disconnectd")});
 
 })
